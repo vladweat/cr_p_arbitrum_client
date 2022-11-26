@@ -17,15 +17,15 @@ from web3 import Web3, HTTPProvider
 class ArbitrumCore:
     def __init__(self, run: str, network: str) -> None:
         # FOR PROD
-        # if (
-        #     run
-        #     == "Special for https://t.me/importweb3, creator - https://t.me/vladweat"
-        # ):
-        #     logger.info(f"{run}")
-        #     pass
-        # else:
-        #     logger.error(f"Fatal error in script. FO!")
-        #     raise SystemExit(1)
+        if (
+            run
+            == "Special for https://t.me/importweb3, creator - https://t.me/vladweat"
+        ):
+            logger.info(f"{run}")
+            pass
+        else:
+            logger.error(f"Fatal error in script. FO!")
+            raise SystemExit(1)
 
         self._web3 = self._set_web3_rpc(network)
         self._wallets_dict = self.__create_wallets_dict()
@@ -395,7 +395,9 @@ class ArbitrumCore:
         )
         return gas_limit
 
-    def _build_tx_param(self, from_private_key: str, to_address: str, value: int) -> dict:
+    def _build_tx_param(
+        self, from_private_key: str, to_address: str, value: int
+    ) -> dict:
         """Build transaction parametrs
 
         Args:
@@ -409,9 +411,11 @@ class ArbitrumCore:
         address = self._get_checksum_address(self._get_address(from_private_key))
         _to_address = self._get_checksum_address(to_address)
 
-        estimate = self._web3.eth.estimate_gas({'to': _to_address, 'from': address,'value': value})
+        estimate = self._web3.eth.estimate_gas(
+            {"to": _to_address, "from": address, "value": value}
+        )
         gas_limit = estimate
-        
+
         transaction_param = {
             "chainId": self._get_chain_id(),
             "from": address,
@@ -419,8 +423,8 @@ class ArbitrumCore:
             "to": _to_address,
             "value": value,
             "gas": gas_limit,
-            'maxPriorityFeePerGas': self._web3.toWei(5,'gwei'),
-            'maxFeePerGas': self._web3.toWei(10,'gwei'),
+            "maxPriorityFeePerGas": self._web3.toWei(5, "gwei"),
+            "maxFeePerGas": self._web3.toWei(10, "gwei"),
             # "gasPrice": self._get_gas_price(),
             "type": "0x2",
         }
